@@ -1,0 +1,102 @@
+{% extends "base/base.html" %}
+
+{% block body %}
+
+<div class="container">
+    <input id="email" class="email" placeholder="Enter your email" aria-label="signup email">
+    <button class="signup-btn" onclick="signup()">Join TaskHero — it's free</button>
+    <div class="muted" style="width:100%">No credit card required. Cancel anytime.</div>
+</div>
+
+
+<div style="margin-top:18px;color:var(--muted);font-size:0.94rem">Trusted by solo builders and small teams — ship more
+    without the noise.</div>
+</section>
+
+
+<aside class="mockup">
+    <div class="mock-screen card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <strong>Today • 3 tasks</strong>
+            <div class="muted">Focus</div>
+        </div>
+
+
+        <div class="task">
+            <div class="left">
+                <div class="dot"></div>
+                <div>
+                    <h4>Design landing page</h4>
+                    <div class="meta">Due today • Priority: High</div>
+                </div>
+            </div>
+            <div class="muted">⏱ 2h</div>
+        </div>
+
+
+        <div class="task">
+            <div class="left">
+                <div style="width:10px;height:10px;border-radius:50%;background:#60a5fa"></div>
+                <div>
+                    <h4>Write README</h4>
+                    <div class="meta">Due tomorrow • Priority: Medium</div>
+                </div>
+            </div>
+            <div class="muted">✍️</div>
+        </div>
+
+
+        <div class="task">
+            <div class="left">
+                <div style="width:10px;height:10px;border-radius:50%;background:#34d399"></div>
+                <div>
+                    <h4>Refactor auth</h4>
+                    <div class="meta">No due date • Priority: Low</div>
+                </div>
+            </div>
+            <div class="muted">🔁</div>
+        </div>
+
+
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center"><button class="pill">+ Add task</button>
+            <div class="muted">Press <kbd>n</kbd> to add</div>
+        </div>
+    </div>
+</aside>
+</main>
+
+
+<section id="features" class="grid" aria-label="features">
+    <div class="item">
+        <h3>Fast capture</h3>
+        <p>Add tasks in a flash using keyboard shortcuts or quick add — finish setup in under 60 seconds.</p>
+    </div>
+    <div class="item">
+        <h3>Smart ordering</h3>
+        <p>Tasks are suggested and ordered by priority and due date — you always know what to do next.</p>
+    </div>
+    <div class="item">
+        <h3>Flexible persistence</h3>
+        <p>Use a local JSON store or plug in SQLite for syncing across devices — your tasks stay yours.</p>
+    </div>
+    <div class="item">
+        <h3>Powerful filters</h3>
+        <p>Filter by tag, priority, date or search free text — find the right task in seconds.</p>
+    </div>
+    <div class="item">
+        <h3>Extendable</h3>
+        <p>Clean modular codebase and a well-documented API makes integrations simple.</p>
+    </div>
+    <div class="item">
+        <h3>Privacy-first</h3>
+        <p>Lightweight by design — no analytics, no noise, only productivity tools you actually need.</p>
+    </div>
+</section>
+
+
+<footer>
+    <div class="muted">© TaskHero — built with ❤️ • <a href="#"
+            style="color:var(--accent);text-decoration:none">Source</a></div>
+</footer>
+</div>
+{% endblock body %}
