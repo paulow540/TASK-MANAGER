@@ -6,3 +6,5 @@ def home_page(request):
 
     return render(request, "taskhero/home.html")
 
+
+
