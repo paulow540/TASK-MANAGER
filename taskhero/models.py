@@ -101,20 +101,10 @@ class Task(models.Model):
 
 
 # Optionally, you can add a short log model or activity feed later:
-# class TaskActivity(models.Model):
-#     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='activities')
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-#     action = models.CharField(max_length=100)  # e.g. 'created', 'marked completed'
-#     created_at = models.DateTimeField(auto_now_add=True)
+class TaskActivity(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='activities')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    action = models.CharField(max_length=100)  # e.g. 'created', 'marked completed'
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
-# Admin registration helper (put in admin.py)
-# from django.contrib import admin
-# from .models import Task
-#
-# @admin.register(Task)
-# class TaskAdmin(admin.ModelAdmin):
-#     list_display = ('title', 'owner', 'status', 'priority', 'due_date', 'is_overdue')
-#     list_filter = ('status', 'priority', 'owner')
-#     search_fields = ('title', 'description', 'owner__username')
-#     readonly_fields = ('created_at', 'updated_at')

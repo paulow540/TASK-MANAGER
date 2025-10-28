@@ -1,0 +1,40 @@
+{% extends 'base/base.html' %}
+{% block title %}My Tasks{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 px-4">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">My Tasks</h1>
+    <a href="{% url 'task_create' %}" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">+ Add Task</a>
+  </div>
+
+  {% if tasks %}
+  <table class="min-w-full bg-white shadow rounded-lg overflow-hidden">
+    <thead class="bg-gray-100">
+      <tr class="text-left text-gray-700">
+        <th class="p-3">Title</th>
+        <th class="p-3">Due Date</th>
+        <th class="p-3">Priority</th>
+        <th class="p-3">Status</th>
+        <th class="p-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for task in tasks %}
+      <tr class="border-t hover:bg-gray-50">
+        <td class="p-3">{{ task.title }}</td>
+        <td class="p-3">{{ task.due_date }}</td>
+        <td class="p-3 capitalize">{{ task.priority }}</td>
+        <td class="p-3 capitalize">{{ task.status }}</td>
+        <td class="p-3">
+          <a href="{% url 'task_update' task.pk %}" class="text-blue-600 hover:underline">Edit</a> |
+          <a href="{% url 'task_delete' task.pk %}" class="text-red-600 hover:underline">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="text-gray-600 mt-4">You have no tasks yet. <a href="{% url 'task_create' %}" class="text-indigo-600 hover:underline">Add one now!</a></p>
+  {% endif %}
+</div>
+{% endblock %}

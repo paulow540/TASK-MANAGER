@@ -1,0 +1,45 @@
+/* style.css */
+
+/* Use same font-family as Google Fonts */
+:root {
+  --accent-1: #6366f1;
+  --accent-2: #7c3aed;
+}
+
+/* small utility for slight card hover scale */
+.scale-102 { transform: scale(1.02); }
+
+/* simple fade animations (used via classes on elements) */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fadeUp 500ms ease forwards;
+}
+
+/* optional stagger helpers (small delays) */
+.animate-fade-up.delay-100 { animation-delay: 100ms; }
+.animate-fade-up.delay-200 { animation-delay: 200ms; }
+
+/* slight subtle shadow for hero card */
+.shadow-2xl {
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+}
+
+/* responsive max-width container tweaks if needed */
+@media (min-width: 1024px) {
+  .scale-102:hover { transform: scale(1.02); }
+}
+
+/* very small style adjustment for inputs to look nicer */
+input[type="checkbox"] {
+  accent-color: rgb(99 102 241); /* tailwind indigo-500 */
+}
+
+/* Accessibility & focus */
+a:focus, button:focus, input:focus {
+  outline: 3px solid rgba(99,102,241,0.15);
+  outline-offset: 2px;
+}

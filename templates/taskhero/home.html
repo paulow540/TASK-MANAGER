@@ -1,74 +1,152 @@
 {% extends 'base/base.html' %}
-{% load static  %}
-{% block title %} — Home{% endblock %}
+{% load static %}
+{% block title %}Home | TaskHero{% endblock %}
+
 {% block content %}
-<section class="hero-gradient py-5">
-    <div class="container py-5">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-5 fw-bold">TaskHero: Conquer your to-do list</h1>
-                <p class="lead text-muted">Organize, prioritize and complete your tasks with a clean, focused dashboard.
-                    TaskHero helps you move from chaos to clarity — fast.</p>
-                <p class="mt-4">
-                    {% comment %} <a href="{% url 'signup' %}" class="btn btn-primary btn-lg me-2">Get Started — It's free</a>
-                    <a href="{% url 'login' %}" class="btn btn-outline-secondary btn-lg">Log In</a> {% endcomment %}
-                    <a href="" class="btn btn-primary btn-lg me-2">Get Started — It's free</a>
-                    <a href="" class="btn btn-outline-secondary btn-lg">Log In</a>
-                </p>
-                <ul class="mt-4">
-                    <li>Three-column dashboard: To Do, In Progress, Completed</li>
-                    <li>Priority color-coding and overdue badges</li>
-                    <li>Private tasks — only you can see your items</li>
-                </ul>
-            </div>
-            <div class="col-lg-6 d-none d-lg-block">
-                <div class="card shadow-sm border-0">
-                    <img src="{% static 'images/preview-dashboard.jpg' %}" alt="TaskHero preview" class="img-fluid">
-                </div>
-            </div>
+<!-- HERO -->
+<section class="relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 py-20 lg:py-28 flex flex-col lg:flex-row items-center gap-12">
+    <div class="w-full lg:w-1/2">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight animate-fade-up">
+        Manage your tasks<br class="hidden sm:inline" /> like a hero 🦸‍♀️
+      </h1>
+      <p class="mt-6 text-lg text-gray-600 max-w-xl animate-fade-up delay-100">
+        TaskHero helps you organize, prioritize, and conquer your day — simple  lists, smart reminders, and progress tracking so you actually get things done.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row sm:items-center gap-4 animate-fade-up delay-200">
+        <a href="#" class="inline-flex items-center gap-3 px-6 py-3 rounded-lg shadow-lg bg-gradient-to-r from-indigo-600 to-violet-500 text-white font-semibold hover:opacity-95">
+          Get Started
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </a>
+
+        <a href="#features" class="text-gray-700 underline">Learn more</a>
+      </div>
+
+      <!-- small stats -->
+      <div class="mt-8 flex flex-wrap gap-6 items-center text-sm text-gray-600">
+        <div class="flex items-center gap-3">
+          <div class="rounded-full bg-indigo-50 px-3 py-2 font-medium text-indigo-600">50k+</div>
+          <div>Users organized</div>
         </div>
+        <div class="flex items-center gap-3">
+          <div class="rounded-full bg-indigo-50 px-3 py-2 font-medium text-indigo-600">4.8</div>
+          <div>Average rating</div>
+        </div>
+      </div>
     </div>
+
+    <!-- Illustration / Card -->
+    <div class="w-full lg:w-1/2 flex justify-center">
+      <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md transform hover:scale-102 transition">
+        <!-- Mock task list -->
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="font-semibold text-gray-800">Daily Focus</h3>
+            <p class="text-sm text-gray-500">3 tasks left</p>
+          </div>
+          <div class="text-sm text-gray-400">Today</div>
+        </div>
+
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3">
+            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600" checked>
+            <div>
+              <div class="font-medium text-gray-800">Write weekly report</div>
+              <div class="text-xs text-gray-400">Due 3:00 PM</div>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600">
+            <div>
+              <div class="font-medium text-gray-800">Design onboarding screens</div>
+              <div class="text-xs text-gray-400">Due tomorrow</div>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <input type="checkbox" class="mt-1 w-4 h-4 text-indigo-600">
+            <div>
+              <div class="font-medium text-gray-800">Team sync</div>
+              <div class="text-xs text-gray-400">Due 5:00 PM</div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="mt-6 flex items-center justify-between text-sm text-gray-500">
+          <div>Progress</div>
+          <div class="font-medium text-indigo-600">67%</div>
+        </div>
+
+        <div class="mt-3 h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div class="h-full bg-indigo-600 rounded-full" style="width: 67%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- decorative gradient -->
+  <div class="absolute inset-x-0 top-0 -z-10 pointer-events-none">
+    <div class="max-w-7xl mx-auto">
+      <div class="h-48 sm:h-64 lg:h-80" aria-hidden></div>
+    </div>
+  </div>
 </section>
 
+<!-- FEATURES -->
+<section id="features" class="mt-12 px-6 pb-20">
+  <div class="max-w-6xl mx-auto text-center">
+    <h2 class="text-3xl font-bold text-gray-900">Why choose TaskHero?</h2>
+    <p class="mt-3 text-gray-600 max-w-2xl mx-auto">Simple, delightful tools to prioritize what's important so you can focus on doing your best work.</p>
 
-<section id="features" class="py-5">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <h5>Clean Dashboard</h5>
-                    <p class="text-muted">Three columns help you focus on what's next. Drag-and-drop (future) and quick
-                        actions speed up your workflow.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <h5>Prioritize</h5>
-                    <p class="text-muted">Color-coded priority levels make it easy to see what's urgent at a glance.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <h5>Stay on schedule</h5>
-                    <p class="text-muted">Due dates and overdue badges help you never miss an important task.</p>
-                </div>
-            </div>
+    <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- card 1 -->
+      <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition animate-fade-up">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-lg bg-indigo-50 inline-flex">
+            <!-- icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m2 0a2 2 0 012 2v3a2 2 0 01-2 2H5a2 2 0 01-2-2v-3a2 2 0 012-2m7-7v4" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800">Smart Organization</h3>
+            <p class="mt-1 text-sm text-gray-600">Categorize, tag and prioritize quickly so nothing slips through the cracks.</p>
+          </div>
         </div>
-    </div>
-</section>
+      </div>
 
-
-<section id="pricing" class="py-5 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <h3>Ready to become a TaskHero?</h3>
-                <p class="text-muted">Sign up now and start managing your tasks in seconds.</p>
-                {% comment %} <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">Create account</a> {% endcomment %}
-                <a href="" class="btn btn-primary btn-lg">Create account</a>
-
-            </div>
+      <!-- card 2 -->
+      <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition animate-fade-up delay-100">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-lg bg-indigo-50 inline-flex">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11V7a4 4 0 10-8 0v4M5 13h14l1 8H4l1-8z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800">Reminders & Alerts</h3>
+            <p class="mt-1 text-sm text-gray-600">Never miss deadlines — set reminders and get notified across devices.</p>
+          </div>
         </div>
+      </div>
+
+      <!-- card 3 -->
+      <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition animate-fade-up delay-200">
+        <div class="flex items-center gap-4">
+          <div class="p-3 rounded-lg bg-indigo-50 inline-flex">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6m-6 0h6" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800">Progress Tracking</h3>
+            <p class="mt-1 text-sm text-gray-600">See weekly trends, completed tasks and celebrate wins with your team.</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 {% endblock %}
