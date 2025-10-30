@@ -1,0 +1,210 @@
+{% extends 'base/base.html' %}
+{% block title %}Prompt Store{% endblock %}
+{% block content %}
+<div class="flex max-w-7xl mx-auto mt-10 gap-6 px-4">
+  <!-- Sidebar -->
+  <aside class="w-80 bg-white rounded-2xl shadow p-4 flex-shrink-0">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="font-semibold">Saved Prompts</h3>
+      <button id="newPromptBtn" class="text-sm text-indigo-600 hover:underline">New</button>
+    </div>
+
+    <div id="promptList" class="space-y-2 overflow-y-auto" style="max-height:520px;">
+      {% for p in prompts %}
+        <div class="prompt-item flex items-start gap-3 p-2 rounded hover:bg-gray-50 cursor-pointer" data-id="{{ p.id }}" data-title="{{ p.title|escapejs }}" data-prompt="{{ p.prompt|escapejs }}">
+          <div class="flex-grow">
+            <div class="font-medium text-sm text-gray-800">{{ p.title }}</div>
+            <div class="text-xs text-gray-500 truncate">{{ p.prompt|truncatechars:80 }}</div>
+          </div>
+          <div class="text-gray-400 text-xs">{{ p.updated_at|timesince }} ago</div>
+        </div>
+      {% empty %}
+        <div class="text-sm text-gray-500">No saved prompts yet. Create one.</div>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <!-- Editor -->
+  <main class="flex-1">
+    <div class="bg-white rounded-2xl shadow p-6">
+      <div class="flex items-center justify-between gap-4 mb-4">
+        <input id="promptTitle" class="flex-1 p-2 border rounded" placeholder="Prompt title (required)" />
+        <div class="flex items-center gap-2">
+          <button id="savePromptBtn" class="px-3 py-2 bg-indigo-600 text-white rounded">Save</button>
+          <button id="deletePromptBtn" class="px-3 py-2 bg-red-100 text-red-600 rounded hidden">Delete</button>
+        </div>
+      </div>
+
+      <textarea id="promptEditor" class="w-full p-3 border rounded h-44" placeholder="{{ default_prompt|default:'' }}"></textarea>
+
+      <div class="flex items-center justify-between mt-4">
+        <div class="flex items-center gap-3">
+          <select id="modelSelect" class="p-2 border rounded">
+            <option value="llama3">llama3</option>
+            <option value="mistral">mistral</option>
+          </select>
+          <button id="runPromptBtn" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-violet-500 text-white rounded">Run</button>
+        </div>
+
+        <div id="runStatus" class="text-sm text-gray-500"></div>
+      </div>
+
+      <div id="runResult" class="mt-4 space-y-3"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // CSRF helper
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) { cookieValue = decodeURIComponent(cookie.slice(name.length + 1)); break; }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  // Elements
+  const promptList = document.getElementById('promptList');
+  const promptEditor = document.getElementById('promptEditor');
+  const promptTitle = document.getElementById('promptTitle');
+  const saveBtn = document.getElementById('savePromptBtn');
+  const runBtn = document.getElementById('runPromptBtn');
+  const modelSelect = document.getElementById('modelSelect');
+  const runResult = document.getElementById('runResult');
+  const runStatus = document.getElementById('runStatus');
+  const deleteBtn = document.getElementById('deletePromptBtn');
+  const newBtn = document.getElementById('newPromptBtn');
+
+  let currentPromptId = null;
+
+  // load prompt into editor
+  promptList?.addEventListener('click', (e) => {
+    const item = e.target.closest('.prompt-item');
+    if (!item) return;
+    currentPromptId = item.dataset.id;
+    promptTitle.value = item.dataset.title;
+    promptEditor.value = item.dataset.prompt;
+    deleteBtn.classList.remove('hidden');
+  });
+
+  // New prompt
+  newBtn?.addEventListener('click', () => {
+    currentPromptId = null;
+    promptTitle.value = "";
+    promptEditor.value = "";
+    deleteBtn.classList.add('hidden');
+  });
+
+  // Save prompt (create or update)
+  saveBtn?.addEventListener('click', async () => {
+    const title = promptTitle.value.trim();
+    const prompt = promptEditor.value.trim();
+    if (!title || !prompt) {
+      alert("Title and prompt are required.");
+      return;
+    }
+    saveBtn.disabled = true;
+    try {
+      const res = await fetch("{% url 'taskhero:prompt_save' %}", {
+        method: "POST",
+        headers: {"Content-Type":"application/json","X-CSRFToken":csrftoken},
+        body: JSON.stringify({ id: currentPromptId, title, prompt })
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Save failed");
+      // Add/Update item in sidebar
+      const p = data.prompt;
+      // Try to find existing DOM item
+      let existing = promptList.querySelector(`.prompt-item[data-id='${p.id}']`);
+      if (existing) {
+        existing.dataset.title = p.title;
+        existing.dataset.prompt = p.prompt;
+        existing.querySelector('.font-medium').textContent = p.title;
+        existing.querySelector('.text-xs').textContent = p.prompt.slice(0,80);
+      } else {
+        const node = document.createElement('div');
+        node.className = 'prompt-item flex items-start gap-3 p-2 rounded hover:bg-gray-50 cursor-pointer';
+        node.dataset.id = p.id;
+        node.dataset.title = p.title;
+        node.dataset.prompt = p.prompt;
+        node.innerHTML = `<div class="flex-grow"><div class="font-medium text-sm text-gray-800">${p.title}</div><div class="text-xs text-gray-500 truncate">${p.prompt.slice(0,80)}</div></div><div class="text-gray-400 text-xs">just now</div>`;
+        promptList.prepend(node);
+      }
+      currentPromptId = p.id;
+      deleteBtn.classList.remove('hidden');
+    } catch (err) {
+      alert("Save failed: " + (err.message||err));
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
+
+  // Delete prompt
+  deleteBtn?.addEventListener('click', async () => {
+    if (!currentPromptId) return alert("No prompt selected");
+    if (!confirm("Delete this prompt?")) return;
+    deleteBtn.disabled = true;
+    try {
+      const res = await fetch("{% url 'taskhero:prompt_delete' %}", {
+        method: "POST", headers: {"Content-Type":"application/json","X-CSRFToken":csrftoken},
+        body: JSON.stringify({ id: currentPromptId })
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Delete failed");
+      // Remove from UI
+      const el = promptList.querySelector(`.prompt-item[data-id='${currentPromptId}']`);
+      if (el) el.remove();
+      currentPromptId = null;
+      promptTitle.value = ""; promptEditor.value = "";
+      deleteBtn.classList.add('hidden');
+    } catch (err) {
+      alert("Delete failed: " + (err.message||err));
+    } finally {
+      deleteBtn.disabled = false;
+    }
+  });
+
+  // Run prompt
+  runBtn?.addEventListener('click', async () => {
+    const prompt = promptEditor.value.trim();
+    if (!prompt) return alert("Prompt is empty");
+    runBtn.disabled = true;
+    runStatus.textContent = "Running...";
+    runResult.innerHTML = "";
+    try {
+      const res = await fetch("{% url 'taskhero:prompt_run' %}", {
+        method: "POST", headers: {"Content-Type":"application/json","X-CSRFToken":csrftoken},
+        body: JSON.stringify({ prompt, model: modelSelect.value })
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Run failed");
+      // Pretty print response (split into lines and cards)
+      const text = (data.response || "").trim();
+      if (!text) {
+        runResult.innerHTML = `<div class="text-sm text-gray-500">No output from model.</div>`;
+      } else {
+        // Basic splitting into tasks (newlines, bullets)
+        const lines = text.split(/\n|•|-/).filter(l => l.trim().length > 2);
+        runResult.innerHTML = lines.map((l,i) => `
+          <div class="bg-gray-50 p-3 rounded flex items-start gap-3">
+            <div class="text-indigo-600 font-semibold">${i+1}.</div>
+            <div class="text-sm text-gray-800">${l.trim()}</div>
+          </div>
+        `).join("");
+      }
+      runStatus.textContent = "Done";
+    } catch (err) {
+      runStatus.textContent = "Error";
+      runResult.innerHTML = `<div class="text-sm text-red-600">Error: ${err.message || err}</div>`;
+    } finally {
+      runBtn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}

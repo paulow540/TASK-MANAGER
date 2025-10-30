@@ -1,0 +1,53 @@
+{% extends 'base/base.html' %}
+{% block title %}AI Task Generator{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 px-4">
+  <h1 class="text-2xl font-bold text-gray-800 mb-4">AI Task Generator 🤖</h1>
+
+  <form id="aiForm" method="post" class="bg-white shadow rounded-lg p-6 space-y-4">
+    {% csrf_token %}
+    <label class="block text-gray-700 font-medium">Describe the type of tasks you want:</label>
+    <textarea name="prompt" rows="3" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-indigo-500" placeholder="e.g. Generate high priority tasks for project deadlines..."></textarea>
+    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">Generate</button>
+  </form>
+
+  <!-- Results -->
+  <div id="result" class="mt-8 space-y-3"></div>
+</div>
+
+<script>
+document.getElementById("aiForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const resultDiv = document.getElementById("result");
+  
+  resultDiv.innerHTML = `
+    <div class="flex justify-center">
+      <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+      <span class="ml-3 text-gray-600">Generating tasks...</span>
+    </div>
+  `;
+
+  const res = await fetch("", { method: "POST", body: formData });
+  const data = await res.json();
+  const responseText = data.response.trim();
+
+  // Split tasks by line or bullet
+  const tasks = responseText.split(/\n|•|-/).filter(line => line.trim().length > 2);
+
+  // Render nicely formatted task cards
+  resultDiv.innerHTML = "";
+  tasks.forEach((task, index) => {
+    const card = document.createElement("div");
+    card.className = "bg-white p-4 rounded-lg shadow hover:shadow-md transition border-l-4 border-indigo-600";
+    card.innerHTML = `
+      <div class="flex items-start space-x-3">
+        <div class="flex-shrink-0 text-indigo-600 font-semibold text-lg">${index + 1}.</div>
+        <div class="text-gray-800 leading-relaxed">${task.trim()}</div>
+      </div>
+    `;
+    resultDiv.appendChild(card);
+  });
+});
+</script>
+{% endblock %}

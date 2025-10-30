@@ -1,45 +1,205 @@
-/* style.css */
-
-/* Use same font-family as Google Fonts */
-:root {
-  --accent-1: #6366f1;
-  --accent-2: #7c3aed;
+/* static/css/main.css
+   Generic, modern "TaskHero"-like styling.
+   Uses CSS variables so you can tweak the theme easily.
+*/
+body{
+  background-color: red;
 }
 
-/* small utility for slight card hover scale */
-.scale-102 { transform: scale(1.02); }
+:root{
+  --bg: #f8fafc;            /* gray-50 */
+  --surface: #ffffff;
+  --muted: #6b7280;         /* text-gray-500 */
+  --text: #111827;          /* text-gray-900 */
+  --indigo: #4f46e5;        /* indigo-600 */
+  --violet: #7c3aed;
+  --accent-gradient: linear-gradient(90deg,var(--indigo),var(--violet));
+  --glass: rgba(255,255,255,0.6);
+  --card-shadow: 0 8px 24px rgba(16,24,40,0.06);
+  --card-shadow-strong: 0 12px 40px rgba(16,24,40,0.10);
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 8px;
+  --max-width: 1200px;
+  --focus-ring: 0 0 0 4px rgba(79,70,229,0.12);
+}
 
-/* simple fade animations (used via classes on elements) */
+/* base reset + body */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  margin:0;
+}
+
+/* container utility */
+.container{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding:0 1.25rem;
+}
+
+/* Header / Navbar */
+.site-header{
+  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.78));
+  border-bottom: 1px solid rgba(15,23,42,0.04);
+}
+.header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  padding:0.9rem 0;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  text-decoration:none;
+  color:var(--text);
+}
+.brand .logo{
+  width:44px;height:44px;border-radius:10px;
+  display:inline-grid;place-items:center;
+  background:var(--accent-gradient);
+  color:white;font-weight:700;
+  box-shadow: 0 6px 18px rgba(79,70,229,0.20);
+  font-size:1rem;
+}
+.brand .title{
+  font-weight:700;font-size:1.05rem;
+}
+
+/* Primary nav */
+.nav-links{display:flex;gap:1.25rem;align-items:center}
+.nav-links a{
+  color:rgba(17,24,39,0.7);
+  text-decoration:none;padding:0.25rem 0.35rem;border-radius:6px;
+  transition:color .15s ease, background .15s ease;
+}
+.nav-links a:hover{ color:var(--text); background: rgba(15,23,42,0.03) }
+
+/* Auth area */
+.auth-area{display:flex;align-items:center;gap:0.75rem}
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;border:0;
+  cursor:pointer;padding:.55rem .9rem;border-radius:10px;
+  font-weight:600;text-decoration:none;
+}
+.btn-primary{
+  background:var(--accent-gradient);
+  color:white;box-shadow: var(--card-shadow);
+  transition:transform .12s ease, opacity .12s ease;
+}
+.btn-primary:hover{ transform:translateY(-2px) }
+.btn-danger{ background:#dc2626;color:white;border-radius:8px;padding:.45rem .75rem }
+
+/* Mobile button */
+.mobile-toggle{
+  display:inline-flex;align-items:center;justify-content:center;background:transparent;border:0;padding:.25rem;border-radius:8px;
+}
+
+/* HERO */
+.hero{
+  padding:3.5rem 0;
+  position:relative;
+  overflow:hidden;
+}
+.hero .title{
+  font-size:clamp(2rem,4vw,3.75rem);
+  line-height:1.02;margin:0 0 .75rem;
+  font-weight:800;
+}
+.hero .lead{color:var(--muted);max-width:48ch}
+
+/* CTA buttons */
+.cta-row{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1.25rem}
+.cta{
+  padding:.7rem 1.05rem;border-radius:12px;font-weight:700;text-decoration:none;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.cta-ghost{background:transparent;color:var(--text);text-decoration:underline}
+
+/* Card / panels */
+.card{
+  background:var(--surface);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--card-shadow);
+  padding:1.25rem;
+}
+.card-strong{ box-shadow:var(--card-shadow-strong) }
+
+/* Small widgets */
+.kpi{display:flex;gap:.75rem;align-items:center}
+.kpi .chip{background:rgba(79,70,229,0.08);padding:.35rem .6rem;border-radius:999px;font-weight:700;color:var(--indigo)}
+
+/* Tables */
+.table{
+  width:100%;border-collapse:collapse;background:var(--surface);border-radius:10px;overflow:hidden;
+  box-shadow:var(--card-shadow);
+}
+.table th, .table td{ padding:.9rem 1rem;text-align:left;border-bottom:1px solid rgba(15,23,42,0.04) }
+.table thead th{ background: #f3f4f6;color:var(--text);font-weight:700 }
+.table tbody tr:hover{ background: #fbfdff }
+
+/* Forms */
+input[type="text"], input[type="password"], input[type="date"], textarea, select {
+  width:100%; padding:.6rem .8rem; border:1px solid rgba(15,23,42,0.08); border-radius:10px;
+  background: linear-gradient(180deg, #ffffff, #fafafa);
+  outline:none; transition:box-shadow .12s ease, border-color .12s ease;
+}
+input:focus, textarea:focus, select:focus{ box-shadow: var(--focus-ring); border-color:var(--indigo) }
+label{ display:block; font-size:.95rem; margin-bottom:.4rem; color:var(--text); font-weight:600 }
+
+/* Forms produced by Django's form.as_p often produce <p> */
+form p{ margin-bottom:.9rem }
+form .helptext{ font-size:.85rem;color:var(--muted) }
+
+/* Progress */
+.progress { height:10px; background:#f3f4f6;border-radius:999px; overflow:hidden }
+.progress > i{ display:block; height:100%; background:var(--indigo); border-radius:999px }
+
+/* Cards grid / features */
+.grid { display:grid; gap:1rem }
+.grid.cols-3 { grid-template-columns: repeat(1, 1fr) }
+@media(min-width:640px){ .grid.cols-3 { grid-template-columns: repeat(2, 1fr) } }
+@media(min-width:1024px){ .grid.cols-3 { grid-template-columns: repeat(3, 1fr) } }
+
+/* Shadows on hover for small cards */
+.card:hover{ transform:translateY(-6px); transition:transform .18s cubic-bezier(.2,.8,.2,1); box-shadow:var(--card-shadow-strong) }
+
+/* small utilities */
+.text-muted{ color:var(--muted) }
+.rounded-sm{ border-radius:var(--radius-sm) }
+.center{ display:flex; align-items:center; justify-content:center }
+
+/* Animations used in templates */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from{ opacity:0; transform:translateY(8px) }
+  to{ opacity:1; transform:translateY(0) }
+}
+.animate-fade-up{ animation: fadeUp .6s cubic-bezier(.2,.8,.2,1) both }
+.animate-fade-up.delay-100{ animation-delay:.1s }
+.animate-fade-up.delay-200{ animation-delay:.2s }
+
+/* Mobile nav (hidden on md-up) */
+#mobileMenu{
+  position:fixed; inset:0; top:64px; left:0; right:0; background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.98));
+  padding:1rem; display:none; z-index:60; overflow:auto;
+}
+#mobileMenu.open{ display:block }
+#mobileMenu a{ display:block; padding:.7rem 0; color:var(--text); border-bottom:1px solid rgba(15,23,42,0.04) }
+
+/* small responsive tweaks */
+@media (max-width: 767px){
+  .nav-links, .auth-area { display:none !important; }
 }
 
-.animate-fade-up {
-  animation: fadeUp 500ms ease forwards;
-}
-
-/* optional stagger helpers (small delays) */
-.animate-fade-up.delay-100 { animation-delay: 100ms; }
-.animate-fade-up.delay-200 { animation-delay: 200ms; }
-
-/* slight subtle shadow for hero card */
-.shadow-2xl {
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
-}
-
-/* responsive max-width container tweaks if needed */
-@media (min-width: 1024px) {
-  .scale-102:hover { transform: scale(1.02); }
-}
-
-/* very small style adjustment for inputs to look nicer */
-input[type="checkbox"] {
-  accent-color: rgb(99 102 241); /* tailwind indigo-500 */
-}
-
-/* Accessibility & focus */
-a:focus, button:focus, input:focus {
-  outline: 3px solid rgba(99,102,241,0.15);
-  outline-offset: 2px;
-}
+/* small accessibility */
+a:focus{ outline: none; box-shadow: var(--focus-ring) }

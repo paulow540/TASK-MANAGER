@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Task
+from .models import Task, SavedPrompt
+
+admin.site.register(SavedPrompt)
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
@@ -9,3 +11,4 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter = ('status', 'priority', 'owner')
     search_fields = ('title', 'description', 'owner__username')
     readonly_fields = ('created_at', 'updated_at')
+
