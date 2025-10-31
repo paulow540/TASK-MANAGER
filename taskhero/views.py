@@ -195,7 +195,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, f"Welcome back, {user.first_name}!")
-            return redirect('taskhero:dashboard')
+            return redirect('taskhero:task_list')
         else:
             messages.error(request, 'Invalid username or password')
     return render(request, 'auth/login.html')
